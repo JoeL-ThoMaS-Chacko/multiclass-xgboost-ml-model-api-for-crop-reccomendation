@@ -20,23 +20,15 @@ def home():
 @app.get('/predict')
 def predict(n: float, p: float, k: float, temp: float, 
             humidity: float, ph: float, rainfall: float):
-    """
-    Predict top-3 crops with probabilities
-    """
-    # Create feature array in correct order
+  
+    
     features = np.array([[n, p, k, temp, humidity, ph, rainfall]])
     
-    # Get probability predictions for all classes
-    probabilities = model.predict_proba(features)[0]  # Get first (and only) sample
-    
-    # Get top-3 indices
+    probabilities = model.predict_proba(features)[0] 
     top_3_indices = np.argsort(probabilities)[::-1][:3]
-    
-    # Get top-3 probabilities and crop names
     top_3_probs = probabilities[top_3_indices]
     top_3_crops = le.inverse_transform(top_3_indices)
     
-    # Format response
     predictions = [
         {
             "rank": i + 1,
@@ -49,7 +41,7 @@ def predict(n: float, p: float, k: float, temp: float,
     
     return {
         "top_predictions": predictions,
-        "recommended_crop": top_3_crops[0],  # Top recommendation
+        "recommended_crop": top_3_crops[0], 
         "input_parameters": {
             "N": n, "P": p, "K": k,
             "temperature": temp,
@@ -57,4 +49,5 @@ def predict(n: float, p: float, k: float, temp: float,
             "ph": ph,
             "rainfall": rainfall
         }
+
     }
